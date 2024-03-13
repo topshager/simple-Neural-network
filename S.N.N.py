@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+from tensorflow.keras.utils import plot_model
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -17,6 +18,7 @@ model = keras.Sequential([
     keras.layers.Dense(128, activation='relu'),
     keras.layers.Dense(10, activation='softmax')
 ])
+plot_model(model,to_file='model_plot.png',show_shapes=True,show_layer_names=True)
 
 # Compiling model
 model.compile(optimizer='adam',
@@ -24,7 +26,15 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 # Training the model
-model.fit(x_train, y_train, epochs=10, batch_size=32)
+training_history = model.fit(x_train, y_train, epochs=10, batch_size=32)
 
 test_loss, test_accuracy = model.evaluate(x_test, y_test)
 print('Test accuracy:', test_accuracy)
+
+
+
+plt.plot(training_history.history['accuracy'], label='Training Accuracy',color='red')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.show()
